@@ -26,9 +26,9 @@ st.sidebar.header("⚙️ Parâmetros de Entrada")
 
  
 
-alpha = st.sidebar.slider( 
+beta = st.sidebar.slider( 
 
-    label="Parâmetro de Forma (α - Shape)", 
+    label="Parâmetro de Forma (β - Shape)", 
 
     min_value=0.5, 
 
@@ -42,9 +42,9 @@ alpha = st.sidebar.slider(
 
  
 
-beta = st.sidebar.slider( 
+eta = st.sidebar.slider( 
 
-    label="Parâmetro de Escala (β - Scale)", 
+    label="Parâmetro de Escala (η - Scale)", 
 
     min_value=1.0, 
 
@@ -72,27 +72,35 @@ n_amostra = st.sidebar.number_input(
 
 ) 
 
+
+
+st.sidebar.markdown(
+    "**Desenvolvido por:**  \n"
+    "Eng. Mecânico Gabriel Ramos"
+)
+
+st.sidebar.divider()
  
 
 # --- PROCESSAMENTO DOS DADOS --- 
 
-tempo_max_dinamico = float(weibull_min.ppf(0.995, c=alpha, scale=beta)) 
+tempo_max_dinamico = float(weibull_min.ppf(0.995, c=beta, scale=eta)) 
 
 tempo = np.linspace(0.001, tempo_max_dinamico, 1000) 
 
  
 
-pdf = weibull_min.pdf(tempo, c=alpha, scale=beta) 
+pdf = weibull_min.pdf(tempo, c=beta, scale=eta) 
 
-confiabilidade = weibull_min.sf(tempo, c=alpha, scale=beta) 
+confiabilidade = weibull_min.sf(tempo, c=beta, scale=eta) 
 
-cdf_teorica = weibull_min.cdf(tempo, c=alpha, scale=beta) 
+cdf_teorica = weibull_min.cdf(tempo, c=beta, scale=eta) 
 
  
 
 np.random.seed(42) 
 
-dados_simulados = weibull_min.rvs(c=alpha, scale=beta, size=n_amostra) 
+dados_simulados = weibull_min.rvs(c=beta, scale=eta, size=n_amostra) 
 
 dados_ordenados = np.sort(dados_simulados) 
 
@@ -178,13 +186,13 @@ with aba1:
 
  
 
-    # Controle de escala Y inteligente para alpha < 1 
+    # Controle de escala Y inteligente para beta < 1 
 
-    if alpha < 1: 
+    if beta < 1: 
 
-        t_corte = weibull_min.ppf(0.02, c=alpha, scale=beta) 
+        t_corte = weibull_min.ppf(0.02, c=beta, scale=eta) 
 
-        y_max = weibull_min.pdf(t_corte, c=alpha, scale=beta) 
+        y_max = weibull_min.pdf(t_corte, c=beta, scale=eta) 
 
         fig1.update_yaxes(range=[0, y_max * 1.5]) 
 
@@ -274,7 +282,7 @@ with aba3:
 
     # Caixa de texto flutuante com os parâmetros estatísticos 
 
-    texto_parametros = f"<b>Forma:</b> {alpha:.3f}<br><b>Escala:</b> {beta:.2f}<br><b>N:</b> {n_amostra}" 
+    texto_parametros = f"<b>Forma:</b> {beta:.3f}<br><b>Escala:</b> {eta:.2f}<br><b>N:</b> {n_amostra}" 
 
     fig3.add_annotation( 
 
@@ -298,9 +306,9 @@ st.markdown("---")
 
 col1, col2, col3 = st.columns(3) 
 
-mttf = weibull_min.mean(c=alpha, scale=beta) 
+mttf = weibull_min.mean(c=beta, scale=eta) 
 
-mediana = weibull_min.median(c=alpha, scale=beta) 
+mediana = weibull_min.median(c=beta, scale=eta) 
 
  
 
@@ -314,9 +322,9 @@ with col2:
 
 with col3: 
 
-    prob_beta = weibull_min.sf(beta, c=alpha, scale=beta) * 100 
+    prob_eta = weibull_min.sf(eta, c=beta, scale=eta) * 100 
 
-    st.metric(label="Confiabilidade no tempo t = β", value=f"{prob_beta:.1f}%") 
+    st.metric(label="Confiabilidade no tempo t = η", value=f"{prob_eta:.1f}%") 
 
  
 
