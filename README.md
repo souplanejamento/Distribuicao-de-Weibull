@@ -1,6 +1,4 @@
 # Distribuicao-de-Weibull
-Ferramentas e soluções para calcular confiabilidade e plotar curvas, utilizando a distribuição de Weibull.
-
 Este script em Python, executado pelo terminal com o Streamlit, abre um painel interativo no navegador para explorar a Distribuição de Weibull. Ao ajustar o parâmetro de forma (α), o parâmetro de escala (β) e o tamanho da amostra (N), você observa em tempo real como se comportam a densidade de falha f(t), a confiabilidade R(t) e a probabilidade acumulada de falha F(t), comparando a curva teórica com dados simulados. 
 
 Objetivos 
